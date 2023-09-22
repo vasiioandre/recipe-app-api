@@ -25,6 +25,7 @@ def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
+
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
     defaults = {
@@ -57,7 +58,7 @@ class PrivateRecipeAPITests(TestCase):
     """Test authenticated API requests."""
 
     def setUp(self):
-        self.client = APIClient
+        self.client = APIClient()
         self.user = get_user_model().objects.create_user(
             'user@example.com',
             'testpass123'
@@ -100,5 +101,5 @@ class PrivateRecipeAPITests(TestCase):
         url = detail_url(recipe.id)
         res = self.client.get(url)
 
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeDetailSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
