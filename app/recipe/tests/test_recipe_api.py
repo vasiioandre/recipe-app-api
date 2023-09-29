@@ -40,6 +40,7 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
@@ -63,7 +64,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(email='user@example.com', password='password123')
+        self.user = create_user(
+            email='user@example.com',
+            password='password123'
+            )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -80,7 +84,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test list of recipes is limited to authenticated user."""
-        other_user = create_user(email='other@example.com', password='password123')
+        other_user = create_user(
+            email='other@example.com',
+            password='password123'
+            )
 
         create_recipe(user=other_user)
         create_recipe(user=self.user)
@@ -163,7 +170,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error."""
-        new_user = create_user(email='user2@example.com', password='test123')
+        new_user = create_user(
+            email='user2@example.com',
+            password='test123'
+            )
         recipe = create_recipe(user=self.user)
 
         payload = {'user': new_user.id}
@@ -185,7 +195,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_delete_recipe_other_users_recipe_error(self):
         """Test trying to delete another user's recipe gives error."""
-        new_user = create_user(email='user2@example.com', password='password123')
+        new_user = create_user(
+            email='user2@example.com',
+            password='password123'
+            )
         recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
